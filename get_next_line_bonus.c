@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   get_next_line.c                                 |o_o || |                */
+/*   get_next_line_bonus.c                           |o_o || |                */
 /*                                                     +:+                    */
 /*   By: saladin <saladin@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/01/21 09:13:47 by saladin       #+#    #+#                 */
-/*   Updated: 2021/06/21 18:29:33 by safoh        \___)=(___/                 */
+/*   Updated: 2021/06/21 17:47:49 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   get_next_line_utils.c                           |o_o || |                */
+/*   get_next_line_utils_bonus.c                     |o_o || |                */
 /*                                                     +:+                    */
 /*   By: saladin <saladin@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/01/21 12:47:10 by saladin       #+#    #+#                 */
-/*   Updated: 2021/06/21 12:42:50 by safoh        \___)=(___/                 */
+/*   Updated: 2021/06/21 13:06:45 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_strdup(const char *s)
 {
