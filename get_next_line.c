@@ -6,7 +6,7 @@
 /*   By: saladin <saladin@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/01/21 09:13:47 by saladin       #+#    #+#                 */
-/*   Updated: 2021/06/21 18:29:33 by safoh        \___)=(___/                 */
+/*   Updated: 2021/06/22 14:28:29 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,74 +50,67 @@ static char	*ft_strchr(const char *s, int c)
 	return (0);
 }
 
-static int	newline(int fd, char **line, char **saved)
+int	newline(int fd, char **line, char **saved, t_line *data)
 {
-	char	*tmp;
-	size_t	len;
+	size_t len;
 
 	len = ft_strlen(saved[fd]);
 	if (ft_strchr(saved[fd], '\n'))
 	{
-		tmp = ft_strdup((ft_strchr(saved[fd], '\n') + 1));
-		if (tmp == NULL)
+		data->tmp = ft_strdup((ft_strchr(saved[fd], '\n') + 1));
+		if (data->tmp == NULL)
 		{
 			free(saved[fd]);
 			return (-1);
 		}
-		*line = ft_substr(saved[fd], 0, (len - (ft_strlen(tmp) + 1)));
+		*line = ft_substr(saved[fd], 0, (len - (ft_strlen(data->tmp) + 1)));
 		free(saved[fd]);
 		if (*line == NULL)
 			return (-1);
-		saved[fd] = tmp;
+		saved[fd] = data->tmp;
 		return (1);
 	}
 	return (0);
 }
 
-static int	output(int fd, char **line, char **saved, ssize_t b_read)
+int	output(int fd, char **line, char **saved, t_line *data)
 {
-	if (b_read == -1)
-	{
-		line[0] = NULL;
+	if (data->b_read < 0)
 		return (-1);
-	}
-	if (b_read == 0)
-		*line = saved[fd];
-	return (0);
+	else if (data->b_read == 0)
+		return (0);
+	else
+		return (newline(fd, line, saved, data));
 }
 
 int	get_next_line(int fd, char **line)
 {
 	static char	*saved[FOPEN_MAX] = {NULL};
 	char		buffer[BUFFER_SIZE + 1];
-	ssize_t		b_read;
-	short 		has_newline;
-	char		*tmp;
+	t_line		data;
 
-	if (fd < 0 || !line || BUFFER_SIZE <= 0)
+	if (fd < 0 || line == NULL || BUFFER_SIZE <= 0)
 	{
 		line[0] = NULL;
 		return (-1);
 	}
-	if (saved[fd] == NULL)
-		saved[fd] = ft_strdup("");
-	b_read = 1;
-	while (b_read)
+	data.b_read = 1;
+	while (data.b_read)
 	{
-		has_newline = newline(fd, line, saved);
-		if (has_newline == -1)
-			return (-1);
-		if (has_newline)
-			return (1);
-		b_read = read(fd, buffer, BUFFER_SIZE);
-		if (b_read <= 0)
-			return (output(fd, line, saved, b_read));
-		buffer[b_read] = '\0';
-		tmp = ft_strjoin(saved[fd], buffer);
-		free(saved[fd]);
-		if (!tmp)
-			return (-1);
-		saved[fd] = tmp;
+		data.b_read = read(fd, buffer, BUFFER_SIZE);
+		buffer[data.b_read] = '\0';
+		if (saved[fd] == NULL)
+			saved[fd] = ft_strdup(buffer);
+		else
+		{
+			data.tmp = ft_strjoin(saved[fd], buffer);
+			free(saved[fd]);
+			if (!data.tmp)
+				return (-1);
+			saved[fd] = data.tmp;
+		}
+		if (ft_strchr(saved[fd], '\n'))
+			break ;
 	}
-	return (0);
+	return (output(fd, line, saved, &data));
 }
