@@ -6,7 +6,7 @@
 /*   By: saladin <saladin@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/01/21 09:13:47 by saladin       #+#    #+#                 */
-/*   Updated: 2021/06/22 14:28:29 by safoh        \___)=(___/                 */
+/*   Updated: 2021/06/22 18:56:30 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,37 +50,44 @@ static char	*ft_strchr(const char *s, int c)
 	return (0);
 }
 
-int	newline(int fd, char **line, char **saved, t_line *data)
+static int	newline(char **line, char **saved, t_line *data)
 {
-	size_t len;
+	size_t	len;
 
-	len = ft_strlen(saved[fd]);
-	if (ft_strchr(saved[fd], '\n'))
+	len = 0;
+	while ((*saved)[len] != '\n' && (*saved)[len] != '\0')
+		len++;
+	if ((*saved)[len] == '\n')
 	{
-		data->tmp = ft_strdup((ft_strchr(saved[fd], '\n') + 1));
-		if (data->tmp == NULL)
+		*line = ft_substr(*saved, 0, len);
+		data->tmp = ft_strdup(&((*saved)[len + 1]));
+		if (*saved != NULL)
 		{
-			free(saved[fd]);
-			return (-1);
+			free(*saved);
+			*saved = NULL;
 		}
-		*line = ft_substr(saved[fd], 0, (len - (ft_strlen(data->tmp) + 1)));
-		free(saved[fd]);
-		if (*line == NULL)
-			return (-1);
-		saved[fd] = data->tmp;
-		return (1);
+		*saved = data->tmp;
 	}
-	return (0);
+	else
+	{
+		*line = ft_strdup(*saved);
+		if (*saved != NULL)
+		{
+			free(*saved);
+			*saved = NULL;
+		}
+	}
+	return (1);
 }
 
-int	output(int fd, char **line, char **saved, t_line *data)
+static int	output(int fd, char **line, char **saved, t_line *data)
 {
 	if (data->b_read < 0)
 		return (-1);
-	else if (data->b_read == 0)
+	else if (data->b_read == 0 && saved[fd] == NULL)
 		return (0);
 	else
-		return (newline(fd, line, saved, data));
+		return (newline(line, &saved[fd], data));
 }
 
 int	get_next_line(int fd, char **line)
@@ -98,15 +105,22 @@ int	get_next_line(int fd, char **line)
 	while (data.b_read)
 	{
 		data.b_read = read(fd, buffer, BUFFER_SIZE);
+		if (data.b_read <= 0)
+			break ;
 		buffer[data.b_read] = '\0';
 		if (saved[fd] == NULL)
+		{
+			if (data.b_read == 0)
+			{
+				saved[fd] = ft_strdup("");
+				break ;
+			}
 			saved[fd] = ft_strdup(buffer);
+		}
 		else
 		{
 			data.tmp = ft_strjoin(saved[fd], buffer);
 			free(saved[fd]);
-			if (!data.tmp)
-				return (-1);
 			saved[fd] = data.tmp;
 		}
 		if (ft_strchr(saved[fd], '\n'))
