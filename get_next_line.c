@@ -6,7 +6,7 @@
 /*   By: saladin <saladin@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/01/21 09:13:47 by saladin       #+#    #+#                 */
-/*   Updated: 2021/06/22 18:56:30 by safoh        \___)=(___/                 */
+/*   Updated: 2021/06/24 18:10:04 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ static int	newline(char **line, char **saved, t_line *data)
 			*saved = NULL;
 		}
 	}
+	if (!*line)
+		return (-1);
 	return (1);
 }
 
@@ -84,8 +86,22 @@ static int	output(int fd, char **line, char **saved, t_line *data)
 {
 	if (data->b_read < 0)
 		return (-1);
-	else if (data->b_read == 0 && saved[fd] == NULL)
+	else if (data->b_read == 0)
+	{
+		*line = ft_strdup(saved[fd]);
+		if (!*line)
+		{
+			free(saved[fd]);
+			saved[fd] = NULL;
+			return (-1);
+		}
+		if (saved[fd] != NULL)
+		{
+			free(saved[fd]);
+			saved[fd] = NULL;
+		}
 		return (0);
+	}
 	else
 		return (newline(line, &saved[fd], data));
 }
@@ -105,24 +121,19 @@ int	get_next_line(int fd, char **line)
 	while (data.b_read)
 	{
 		data.b_read = read(fd, buffer, BUFFER_SIZE);
-		if (data.b_read <= 0)
-			break ;
-		buffer[data.b_read] = '\0';
+		if (data.b_read == -1)
+			return (-1);
+		buffer[data.b_read] = '\0'; // maybe exit with checking buffer[0] for '\0'
 		if (saved[fd] == NULL)
-		{
-			if (data.b_read == 0)
-			{
-				saved[fd] = ft_strdup("");
-				break ;
-			}
 			saved[fd] = ft_strdup(buffer);
-		}
 		else
 		{
 			data.tmp = ft_strjoin(saved[fd], buffer);
 			free(saved[fd]);
 			saved[fd] = data.tmp;
 		}
+		if (!saved[fd])
+			return (-1);
 		if (ft_strchr(saved[fd], '\n'))
 			break ;
 	}
