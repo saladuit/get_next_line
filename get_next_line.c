@@ -6,7 +6,7 @@
 /*   By: saladin <saladin@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/01/21 09:13:47 by saladin       #+#    #+#                 */
-/*   Updated: 2021/06/28 16:08:06 by safoh         ########   odam.nl         */
+/*   Updated: 2021/06/28 16:30:34 by safoh         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ int	get_next_line(int fd, char **line)
 		data.b_read = read(fd, buffer, BUFFER_SIZE);
 		if (data.b_read == -1)
 			return (-1);
-		buffer[data.b_read] = '\0'; // maybe exit with checking buffer[0] for '\0'
+		buffer[data.b_read] = '\0';
 		if (saved[fd] == NULL)
 			saved[fd] = ft_strdup(buffer);
 		else
