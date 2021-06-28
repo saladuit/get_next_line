@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   get_next_line.c                                 |o_o || |                */
+/*   get_next_line.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: saladin <saladin@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/01/21 09:13:47 by saladin       #+#    #+#                 */
-/*   Updated: 2021/06/24 18:10:04 by safoh        \___)=(___/                 */
+/*   Updated: 2021/06/28 16:08:06 by safoh         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static int	output(int fd, char **line, char **saved, t_line *data)
 {
 	if (data->b_read < 0)
 		return (-1);
-	else if (data->b_read == 0)
+	else if (data->b_read == 0 && !ft_strchr(saved[fd], '\n'))
 	{
 		*line = ft_strdup(saved[fd]);
 		if (!*line)
@@ -113,10 +113,7 @@ int	get_next_line(int fd, char **line)
 	t_line		data;
 
 	if (fd < 0 || line == NULL || BUFFER_SIZE <= 0)
-	{
-		line[0] = NULL;
 		return (-1);
-	}
 	data.b_read = 1;
 	while (data.b_read)
 	{
