@@ -1,14 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
+/*                                                    .--.  _                 */
 /*   main.c                                          |o_o || |                */
-/*                                                    +:+ +:+         +:+     */
-/*   By: saladin <marvin@42.fr>                     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/27 16:37:09 by saladin           #+#    #+#             */
-/*   Updated: 2021/06/17 16:16:34 by safoh        \___)=(___/                 */
+/*                                                   |:_/ || |_ _   ___  __   */
+/*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
+/*                                                 (|     | )|_| |_| |>  <    */
+/*   Created: 2022/07/16 23:15:39 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
+/*   Updated: 2022/07/16 23:16:15 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include <stdio.h>
 #include "get_next_line.h"
@@ -56,27 +57,27 @@ int	main(void)
 	{
 	case 1:
 		printf("Does an empty file work correctly?\n\n");
-		ft_tester("empty.txt");
+		ft_tester("txt/empty.txt");
 		break;
 	case 2:
 		printf("Does one letter work correctly?\n\n");
-		ft_tester("one_letter.txt");
+		ft_tester("txt/one_letter.txt");
 		break;
 	case 3:
 		printf("Does one line work correctly?\n\n");
-		ft_tester("one_line.txt");
+		ft_tester("txt/one_line.txt");
 		break;
 	case 4:
 		printf("Do two lines work correctly?\n\n");
-		ft_tester("two_lines.txt");
+		ft_tester("txt/two_lines.txt");
 		break;
 	case 5:
 		printf("Does a big file work correctly?\n\n");
-		ft_tester("ipsum.txt");
+		ft_tester("txt/ipsum.txt");
 		break;
 	case 6:
 		printf("Does a big file on one line work correctly?\n\n");
-		ft_tester("ipsum_one_line.txt");
+		ft_tester("txt/ipsum_one_line.txt");
 		break;
 	case 7:
 		printf("Does a non existent file work correctly?\n\n");
